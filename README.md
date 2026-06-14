@@ -19,7 +19,7 @@ A golf reseller makes money two ways: **moving inventory faster** (every club si
 | 1 | **Trade-In Listing Agent** | Turns a messy customer trade-in (text/photo) into a priced, graded, ready-to-post listing | Labor cost ↓ / listing speed ↑ | ✅ Prototype: `listing-agent.html` |
 | 2 | **AI Club-Fit Assistant** | On-site chatbot that recommends the right used clubs to shoppers | Conversion rate ↑ | ✅ Prototype: `club-fit-assistant.html` |
 | 3 | **Photo Condition Grader** | Vision model grades club wear from photos against the 10-point scale | Grading consistency / speed | 🗺️ Spec'd in roadmap |
-| 4 | **Dynamic Pricing Engine** | Reprices inventory against live market signals | Margin / sell-through | 🗺️ Spec'd in roadmap |
+| 4 | **Dynamic Pricing Engine** | Reprices inventory against live market signals | Margin / sell-through | ✅ Prototype: `pricing-engine.html` |
 | 5 | **Bulk SEO Description Writer** | Generates unique, search-optimized copy for every SKU | Organic traffic ↑ | 🗺️ Spec'd in roadmap |
 
 See **[ROI-analysis.md](ROI-analysis.md)** for the math behind each.
@@ -30,6 +30,7 @@ Open either file in any web browser — just double-click:
 
 - `listing-agent.html` — paste a sample trade-in, click **Run the agent**, watch it extract → grade → price → write the listing.
 - `club-fit-assistant.html` — answer a few questions and get matched to clubs, the way an on-site assistant would convert a browser.
+- `pricing-engine.html` — reprice live inventory against market signals; recover margin on underpriced clubs and flag stale stock to mark down.
 
 ## How the prototypes map to production
 
@@ -49,6 +50,7 @@ james-swing/
 ├── index.html                 ← "James Swing" demo storefront (homepage)
 ├── listing-agent.html         ← Tool #1 prototype
 ├── club-fit-assistant.html    ← Tool #2 prototype
+├── pricing-engine.html        ← Tool #4 prototype
 ├── ROI-analysis.md            ← the business case + assumptions
 ├── roadmap.md                 ← specs for tools #3–5
 ├── github-setup.md            ← how to publish this repo

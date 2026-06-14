@@ -7,7 +7,7 @@ These are spec'd, not yet built. Each follows the same pattern as the working de
 **Pipeline:** vision model detects wear features → maps to the 10-point scale (Brand New → Poor) → returns a proposed grade with the evidence ("sky marks on crown → caps at 7") → human confirms.
 **Build notes:** start with a vision LLM and few-shot examples per club type; later fine-tune on labeled intake photos. Keep a human in the loop for grade approval.
 
-## Tool #4 — Dynamic Pricing Engine
+## Tool #4 — Dynamic Pricing Engine  ✅ prototype built (`pricing-engine.html`)
 **Input:** SKU, condition, current inventory age, competitor/market signals.
 **Pipeline:** pull comparable sold prices → factor condition + age + demand → propose a price band → flag clubs to mark down before they go stale.
 **Build notes:** rules engine first (transparent, easy to trust), then layer ML once there's sell-through data. Always show the "why" behind a price.
