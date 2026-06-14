@@ -6,211 +6,230 @@
 <title>James Swing · Buy & Sell Used Golf Clubs</title>
 <style>
   :root{
-    --blue:#0a3d8f; --blue2:#1565d8; --sky:#3b9cff; --ink:#0c1b33; --paper:#f3f6fb;
-    --card:#fff; --line:#dde6f2; --muted:#5b6b85; --gold:#e2a52b;
-    --shadow:0 12px 34px rgba(10,61,143,.14);
+    --blue:#0a3d8f; --blue2:#1565d8; --sky:#3b9cff; --ink:#0c1424; --paper:#ffffff;
+    --grey:#5d6b82; --line:#e2e8f1; --red:#c8102e; --soft:#eef2f8; --steel:#8aa0bd;
+    --gold:#e2a52b;
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.45}
   a{color:inherit;text-decoration:none}
-  /* top bar */
-  .topbar{background:var(--ink);color:#cdd9ee;font-size:12.5px;text-align:center;padding:7px}
-  .topbar b{color:#fff}
-  /* nav */
-  nav{background:var(--blue);color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.15)}
-  .nav{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:14px 20px}
-  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:21px;letter-spacing:.3px}
-  .logo .ball{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#bcd3f0);box-shadow:inset -3px -3px 6px rgba(0,0,0,.2)}
-  .logo span{color:var(--sky)}
-  .search{flex:1;display:flex;background:#fff;border-radius:8px;overflow:hidden;max-width:460px}
-  .search input{flex:1;border:none;padding:10px 14px;font-size:14px;outline:none}
-  .search button{border:none;background:var(--gold);color:#1a1a1a;font-weight:700;padding:0 16px;cursor:pointer}
-  .navlinks{display:flex;gap:16px;font-size:14px;font-weight:600}
-  .navlinks a:hover{color:var(--sky)}
-  .cart{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer}
-  @media(max-width:860px){.search,.navlinks{display:none}}
+  img{max-width:100%}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 22px}
+  /* utility promo bar */
+  .promo{background:#000;color:#fff;text-align:center;font-size:12.5px;font-weight:700;letter-spacing:.5px;padding:9px;text-transform:uppercase}
+  .promo a{color:var(--sky);text-decoration:underline}
+  .utility{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--line)}
+  .utility .wrap{display:flex;justify-content:space-between;width:100%;padding-top:6px;padding-bottom:6px}
+  /* header */
+  header .wrap{display:flex;align-items:center;gap:22px;padding-top:16px;padding-bottom:16px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:26px;font-style:italic;letter-spacing:-.5px}
+  .logo .ball{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#bcd3f0);box-shadow:inset -3px -3px 6px rgba(0,0,0,.2);border:1px solid #cfe}
+  .logo span{color:var(--blue)} .logo em{color:var(--red);font-style:italic}
+  .search{flex:1;display:flex;border:2px solid var(--ink);border-radius:3px;overflow:hidden;max-width:560px}
+  .search input{flex:1;border:none;padding:11px 14px;font-size:14px;outline:none}
+  .search button{border:none;background:var(--red);color:#fff;font-weight:800;padding:0 22px;cursor:pointer;letter-spacing:.5px}
+  .htools{display:flex;align-items:center;gap:18px;margin-left:auto;font-size:12px;font-weight:700;color:var(--grey)}
+  .htools .store small{display:block;color:var(--ink);font-size:13px}
+  .icons{display:flex;gap:14px;font-size:18px}
+  /* category nav */
+  nav.cats{background:#000}
+  nav.cats .wrap{display:flex;justify-content:center;flex-wrap:wrap;gap:26px;padding:13px 22px}
+  nav.cats a{color:#fff;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;text-transform:uppercase}
+  nav.cats a:hover{color:var(--sky)}
   /* hero */
-  .hero{background:linear-gradient(135deg,var(--blue),var(--blue2) 55%,var(--sky));color:#fff;position:relative;overflow:hidden}
-  .hero .wrap{max-width:1180px;margin:0 auto;padding:64px 20px;position:relative;z-index:2}
-  .hero h1{font-size:44px;margin:0 0 14px;max-width:620px;line-height:1.1}
-  .hero p{font-size:18px;max-width:540px;opacity:.94;margin:0 0 26px}
-  .btns{display:flex;gap:12px;flex-wrap:wrap}
-  .btn{padding:14px 24px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;border:none;transition:.15s}
-  .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
-  .btn-gold{background:var(--gold);color:#1a1a1a}
-  .btn-ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}
-  .hero::after{content:"";position:absolute;right:-120px;top:-80px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#bcd3f0);opacity:.12}
-  /* trust bar */
-  .trust{background:#fff;border-bottom:1px solid var(--line)}
-  .trust .wrap{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-around;padding:16px 20px;font-size:13.5px;font-weight:600;color:var(--blue)}
-  .trust div{display:flex;align-items:center;gap:8px}
-  /* sections */
-  .sec{max-width:1180px;margin:46px auto;padding:0 20px}
-  .sec h2{font-size:24px;margin:0 0 4px}
-  .sec .lede{color:var(--muted);margin:0 0 22px}
-  /* categories */
-  .cats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  @media(max-width:760px){.cats{grid-template-columns:repeat(2,1fr)}}
-  .cat{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border-radius:14px;padding:26px 20px;font-weight:700;font-size:17px;box-shadow:var(--shadow);transition:.15s;cursor:pointer}
-  .cat:hover{transform:translateY(-3px)}
-  .cat small{display:block;font-weight:500;opacity:.85;font-size:12.5px;margin-top:6px}
-  /* products */
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-  @media(max-width:980px){.grid{grid-template-columns:repeat(3,1fr)}}
-  @media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
-  .prod{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:.15s}
-  .prod:hover{transform:translateY(-3px)}
-  .thumb{height:140px;background:linear-gradient(135deg,#e8f0fc,#cfe0fa);display:flex;align-items:center;justify-content:center;position:relative}
-  .thumb .club{font-size:46px}
-  .cond{position:absolute;top:10px;left:10px;background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
-  .pinfo{padding:14px;display:flex;flex-direction:column;gap:4px;flex:1}
-  .pbrand{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-  .pname{font-weight:700;font-size:14.5px;min-height:38px}
-  .pprice{color:var(--blue);font-weight:800;font-size:18px;margin-top:auto}
-  .pprice s{color:var(--muted);font-weight:500;font-size:13px;margin-left:6px}
-  .add{margin-top:8px;border:none;background:var(--blue);color:#fff;border-radius:8px;padding:9px;font-weight:700;font-size:13px;cursor:pointer;transition:.15s}
-  .add:hover{background:var(--blue2)}
-  /* AI feature bands */
-  .band{border-radius:18px;padding:36px;display:flex;align-items:center;gap:30px;color:#fff;box-shadow:var(--shadow);flex-wrap:wrap}
-  .band1{background:linear-gradient(135deg,var(--blue),var(--blue2))}
-  .band2{background:linear-gradient(135deg,#0c2c63,#1565d8)}
-  .band .txt{flex:1;min-width:260px}
-  .band h3{font-size:24px;margin:0 0 8px}
-  .band p{margin:0 0 16px;opacity:.93;max-width:520px}
-  .band .emoji{font-size:60px}
+  .hero{background:linear-gradient(120deg,var(--ink) 0%,var(--blue) 55%,var(--blue2) 100%);color:#fff;position:relative;overflow:hidden}
+  .hero .wrap{padding:70px 22px;position:relative;z-index:2}
+  .hero h1{font-size:62px;line-height:.95;margin:0;font-weight:900;font-style:italic;letter-spacing:-1px;text-shadow:0 3px 16px rgba(0,0,0,.3);max-width:760px}
+  .hero p{font-size:24px;font-style:italic;margin:18px 0 28px;opacity:.95}
+  .cta{display:inline-block;background:transparent;color:#fff;border:2px solid #fff;border-radius:4px;padding:15px 40px;font-weight:800;font-size:16px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:.15s}
+  .cta:hover{background:#fff;color:var(--blue)}
+  .cta-red{background:var(--red);border-color:var(--red)} .cta-red:hover{background:#a50d26;color:#fff}
+  .hero .club{position:absolute;right:-40px;top:50%;transform:translateY(-50%);font-size:380px;opacity:.10;z-index:1}
+  /* brand tagline band */
+  .tagband{text-align:center;padding:36px 22px 8px}
+  .tagband h2{font-size:30px;font-weight:900;font-style:italic;margin:0;letter-spacing:-.5px}
+  .tagband p{font-size:18px;font-weight:800;font-style:italic;color:var(--grey);margin:4px 0 0;letter-spacing:1px}
+  /* section header */
+  .sechead{text-align:center;font-size:24px;font-weight:900;font-style:italic;letter-spacing:.5px;margin:0}
+  .sechead.sub{font-size:14px;font-weight:700;color:var(--grey);font-style:italic}
+  .band-soft{background:var(--soft);padding:14px 0}
+  /* featured items */
+  section.feat{padding:34px 0}
+  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:6px}
+  @media(max-width:1000px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.feat-grid{grid-template-columns:1fr}}
+  .fcard{border:1px solid var(--line);border-radius:8px;padding:18px;display:flex;flex-direction:column;box-shadow:0 6px 18px rgba(10,61,143,.06)}
+  .fcard .ph{height:150px;background:linear-gradient(135deg,#eef3fb,#d7e4f8);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:12px;position:relative}
+  .fcard .cond{position:absolute;top:8px;left:8px;background:var(--blue);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:14px;text-transform:uppercase}
+  .fbrand{font-weight:900;font-style:italic;font-size:18px}
+  .fmodel{color:var(--red);font-weight:800;font-style:italic;font-size:14px;margin-bottom:6px}
+  .fmsrp{font-size:12px;color:var(--grey);text-decoration:line-through}
+  .flabel{font-size:12px;color:var(--grey);margin-top:2px}
+  .fprice{font-size:24px;font-weight:900;font-style:italic;color:var(--ink);margin:2px 0 12px}
+  .shopnow{margin-top:auto;text-align:center;background:var(--red);color:#fff;border:none;padding:11px;border-radius:4px;font-weight:800;letter-spacing:.5px;cursor:pointer;text-transform:uppercase;font-size:13px}
+  .shopnow:hover{background:#a50d26}
+  /* trade-in band */
+  .tradein{background:linear-gradient(100deg,var(--steel),#a9bcd6);position:relative;overflow:hidden}
+  .tradein .wrap{padding:50px 22px;position:relative;z-index:2}
+  .tradein h2{font-size:46px;font-weight:900;font-style:italic;color:#fff;margin:0;text-shadow:0 2px 10px rgba(0,0,0,.2)}
+  .tradein p{font-size:18px;color:#fff;max-width:560px;margin:12px 0 22px;font-weight:600}
+  .tradein .ghost{font-size:150px;font-weight:900;font-style:italic;color:#fff;opacity:.18;position:absolute;right:30px;top:50%;transform:translateY(-50%);z-index:1}
+  /* insights / expert row */
+  .insights{padding:30px 0 40px}
+  .ins-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:14px}
+  @media(max-width:1000px){.ins-grid{grid-template-columns:repeat(2,1fr)}}
+  .icard{border-radius:8px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.12);cursor:pointer;transition:.15s}
+  .icard:hover{transform:translateY(-3px)}
+  .icard .top{height:180px;display:flex;align-items:center;justify-content:center;font-size:70px;color:#fff}
+  .icard .cap{background:#111;color:#fff;text-align:center;padding:12px}
+  .icard .cap b{display:block;font-style:italic;font-weight:900;font-size:15px}
+  .icard .cap span{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:1px}
+  /* trust row */
+  .trust{background:#6f8198;padding:0}
+  .trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--steel)}
+  @media(max-width:900px){.trust-grid{grid-template-columns:repeat(2,1fr)}}
+  .tcell{height:230px;position:relative;display:flex;align-items:flex-end;color:#fff;background-size:cover;background-position:center}
+  .tcell .ov{width:100%;background:linear-gradient(180deg,transparent,rgba(0,0,0,.8));padding:18px;text-align:center}
+  .tcell .ov b{display:block;font-size:18px;font-weight:900;font-style:italic}
+  .tcell .ov span{font-size:12px;letter-spacing:.5px}
+  .t1{background:linear-gradient(135deg,#1b2a44,#33507f)} .t2{background:linear-gradient(135deg,#2a3b22,#4a6b39)}
+  .t3{background:linear-gradient(135deg,#3a2230,#7a3a52)} .t4{background:linear-gradient(135deg,#222a3a,#3a4a6b)}
+  .tcell .ic{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:64px;opacity:.85}
   /* footer */
-  footer{background:var(--ink);color:#aebfdc;margin-top:50px}
-  .foot{max-width:1180px;margin:0 auto;padding:40px 20px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px}
-  @media(max-width:760px){.foot{grid-template-columns:1fr 1fr}}
-  .foot h4{color:#fff;font-size:14px;margin:0 0 12px}
-  .foot a{display:block;font-size:13px;margin-bottom:8px;color:#aebfdc}
-  .foot a:hover{color:#fff}
-  .copy{border-top:1px solid #1d2f4f;text-align:center;padding:16px;font-size:12px;color:#7e90b3}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;box-shadow:var(--shadow);transition:.3s;z-index:99}
+  footer{background:#000;color:#9fb0c8}
+  .fnewsletter{border-bottom:1px solid #1b2436}
+  .fnewsletter .wrap{display:flex;flex-wrap:wrap;gap:30px;justify-content:space-between;align-items:center;padding:26px 22px}
+  .fnewsletter form{display:flex;border:1px solid #33425e;border-radius:3px;overflow:hidden}
+  .fnewsletter input{border:none;padding:11px 14px;font-size:13px;width:240px}
+  .fnewsletter button{border:none;background:#fff;color:#000;font-weight:800;padding:0 18px;cursor:pointer;letter-spacing:.5px}
+  .social{display:flex;gap:12px;font-size:20px}
+  .social span{width:34px;height:34px;border-radius:5px;background:#1b2436;display:flex;align-items:center;justify-content:center}
+  .fcols{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:36px 22px}
+  @media(max-width:800px){.fcols{grid-template-columns:repeat(2,1fr)}}
+  .fcols h4{color:#fff;font-size:14px;font-weight:800;letter-spacing:.5px;margin:0 0 14px;text-transform:uppercase}
+  .fcols a{display:block;font-size:13px;margin-bottom:9px;color:#9fb0c8}
+  .fcols a:hover{color:#fff}
+  .fbottom{border-top:1px solid #1b2436;text-align:center;font-size:11.5px;color:#6a7d97;padding:16px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--ink);color:#fff;padding:13px 24px;border-radius:8px;font-weight:700;box-shadow:0 12px 30px rgba(0,0,0,.3);transition:.3s;z-index:99}
   .toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-<div class="topbar">⛳ <b>Free shipping</b> on orders over $99 · <b>90-day</b> playability guarantee · Trade in, trade up</div>
 
-<nav><div class="nav">
-  <div class="logo"><span class="ball"></span>James<span>&nbsp;Swing</span></div>
-  <form class="search" onsubmit="return false"><input placeholder="Search 40,000+ used clubs…"><button>Search</button></form>
-  <div class="navlinks"><a href="#shop">Clubs</a><a href="#tradein">Trade-In</a><a href="#fit">Club Fitting</a><a href="#deals">Deals</a></div>
-  <div class="cart" id="cart">🛒 Cart (<span id="ct">0</span>)</div>
+<div class="promo">⛳ NEW: AI TRADE-IN AGENT — VALUE YOUR CLUBS IN SECONDS · <a onclick="open('listing-agent.html','_blank')">TRY IT NOW</a></div>
+<div class="utility"><div class="wrap"><span>🏌️ Lefties</span><span>Women's</span></div></div>
+
+<header><div class="wrap">
+  <a class="logo"><span class="ball"></span><span>James</span><em>Swing</em></a>
+  <form class="search" onsubmit="return false"><input placeholder="Search over 197,154 used golf clubs"><button>SEARCH</button></form>
+  <div class="htools">
+    <div class="store">📍 My Store<small>Select a store</small></div>
+    <div class="icons"><span>👤</span><span>📍</span><span>📞</span></div>
+  </div>
+</div></header>
+
+<nav class="cats"><div class="wrap">
+  <a onclick="filter('Driver')">Drivers</a>
+  <a onclick="filter('Iron Set')">Iron Sets</a>
+  <a onclick="open('listing-agent.html','_blank')">Trade + Sell</a>
+  <a onclick="open('club-fit-assistant.html','_blank')">Fitting</a>
+  <a onclick="scrollFeat()">Shafts</a>
+  <a onclick="scrollFeat()">Fairway Woods</a>
+  <a onclick="filter('Putter')">Putters</a>
+  <a onclick="filter('Wedge')">Wedges</a>
+  <a onclick="scrollFeat()">Comparison Videos</a>
 </div></nav>
 
 <section class="hero"><div class="wrap">
-  <h1>Buy & sell used golf clubs — smarter.</h1>
-  <p>Premium pre-owned clubs, expertly graded and fairly priced. Powered by AI that prices your trade-in in seconds and helps you find your perfect fit.</p>
-  <div class="btns">
-    <button class="btn btn-gold" onclick="go('#shop')">Shop clubs</button>
-    <button class="btn btn-ghost" onclick="go('#tradein')">Value my trade-in</button>
+  <div class="club">🏌️</div>
+  <h1>HIGHEST TRADE VALUES GUARANTEED</h1>
+  <p>Turn your old clubs into store credit today.</p>
+  <button class="cta" onclick="open('listing-agent.html','_blank')">Check Values</button>
+</div></section>
+
+<div class="tagband">
+  <h2>JAMES SWING GOLF</h2>
+  <p>HIGHEST RATED GOLF RETAILER</p>
+</div>
+
+<div class="band-soft"><div class="wrap"><p class="sechead">FEATURED ITEMS</p></div></div>
+<section class="feat"><div class="wrap">
+  <div class="feat-grid" id="featGrid"></div>
+</div></section>
+
+<section class="tradein"><div class="wrap">
+  <div class="ghost">trade + sell</div>
+  <h2>Put Your Old Clubs to Work!</h2>
+  <p>Experience the highest trade-in value with the industry's fastest payments — now powered by our AI valuation agent. Guaranteed.</p>
+  <button class="cta cta-red" onclick="open('listing-agent.html','_blank')">Start My Trade-In</button>
+</div></section>
+
+<div style="padding:30px 0 0"><div class="wrap"><p class="sechead">SHOP TOP GOLF PROMOTIONS</p><p class="sechead sub">Top deals on the best clubs</p></div></div>
+
+<section class="insights"><div class="wrap">
+  <p class="sechead" style="margin-bottom:0">EXPERT INSIGHTS</p>
+  <div class="ins-grid">
+    <div class="icard" onclick="scrollFeat()"><div class="top" style="background:linear-gradient(135deg,#c8102e,#7a0a1d)">🆚</div><div class="cap"><b>Club Comparison</b><span>Videos</span></div></div>
+    <div class="icard" onclick="scrollFeat()"><div class="top" style="background:linear-gradient(135deg,#1565d8,#0a3d8f)">🎙️</div><div class="cap"><b>Fitter's Insights</b><span>Podcast</span></div></div>
+    <div class="icard" onclick="scrollFeat()"><div class="top" style="background:linear-gradient(135deg,#2b3a55,#16202f)">📝</div><div class="cap"><b>Unique Clubs in Play</b><span>Blog</span></div></div>
+    <div class="icard" onclick="scrollFeat()"><div class="top" style="background:linear-gradient(135deg,#c8102e,#7a0a1d)">📺</div><div class="cap"><b>Product Education</b><span>Livestream</span></div></div>
   </div>
 </div></section>
 
-<div class="trust"><div class="wrap">
-  <div>✅ Every club hand-graded 6–10</div>
-  <div>🤖 AI-powered instant pricing</div>
-  <div>🚚 Fast, free shipping over $99</div>
-  <div>↩️ 90-day playability guarantee</div>
-</div></div>
-
-<!-- categories -->
-<section class="sec" id="shop">
-  <h2>Shop by category</h2>
-  <p class="lede">Thousands of clubs in stock, all condition-graded by our experts.</p>
-  <div class="cats">
-    <div class="cat" onclick="filter('Driver')">Drivers<small>Distance & forgiveness</small></div>
-    <div class="cat" onclick="filter('Iron Set')">Irons<small>Game-improvement to tour</small></div>
-    <div class="cat" onclick="filter('Wedge')">Wedges<small>Spin & control</small></div>
-    <div class="cat" onclick="filter('Putter')">Putters<small>Roll it pure</small></div>
-  </div>
-</section>
-
-<!-- products -->
-<section class="sec" id="deals">
-  <h2>Featured deals</h2>
-  <p class="lede" id="filterNote">Hand-picked pre-owned clubs at great value.</p>
-  <div class="grid" id="grid"></div>
-</section>
-
-<!-- AI trade-in band -->
-<section class="sec" id="tradein">
-  <div class="band band1">
-    <div class="emoji">🤖</div>
-    <div class="txt">
-      <h3>Instant AI trade-in valuation</h3>
-      <p>Describe your club in plain English — our AI agent extracts the specs, grades the condition on our 10-point scale, and prices it on the spot. No waiting, no guesswork.</p>
-      <button class="btn btn-gold" onclick="open('listing-agent.html','_blank')">Try the trade-in agent →</button>
-    </div>
-  </div>
-</section>
-
-<!-- AI fitting band -->
-<section class="sec" id="fit">
-  <div class="band band2">
-    <div class="txt">
-      <h3>Not sure what fits you? Ask our AI.</h3>
-      <p>Answer a few quick questions and our AI Club-Fit Assistant matches you to the right used clubs for your game and budget — like having a fitter on call 24/7.</p>
-      <button class="btn btn-gold" onclick="open('club-fit-assistant.html','_blank')">Find my fit →</button>
-    </div>
-    <div class="emoji">🎯</div>
-  </div>
-</section>
+<section class="trust"><div class="trust-grid">
+  <div class="tcell t1"><div class="ic">🏌️</div><div class="ov"><b>#1 IN SELECTION</b><span>Shop over 150,000 clubs</span></div></div>
+  <div class="tcell t2"><div class="ic">🎯</div><div class="ov"><b>TOUR LEVEL FITTING</b><span>Top 100 club fitter</span></div></div>
+  <div class="tcell t3"><div class="ic">💰</div><div class="ov"><b>TRADE-IN PROGRAM</b><span>Highest values for your old clubs</span></div></div>
+  <div class="tcell t4"><div class="ic">🏡</div><div class="ov"><b>FAMILY OWNED</b><span>Small business</span></div></div>
+</div></section>
 
 <footer>
-  <div class="foot">
-    <div>
-      <div class="logo" style="color:#fff;margin-bottom:10px"><span class="ball"></span>James<span style="color:var(--sky)">&nbsp;Swing</span></div>
-      <p style="font-size:13px;max-width:300px">The smarter way to buy and sell used golf clubs — fair grading, fair prices, powered by AI.</p>
+  <div class="fnewsletter"><div class="wrap">
+    <form onsubmit="toast('Thanks for subscribing!');return false"><input placeholder="Enter your email address"><button>SUBSCRIBE</button></form>
+    <div><div style="color:#fff;font-weight:800;letter-spacing:1px;margin-bottom:8px;font-size:13px">CONNECT WITH US</div>
+      <div class="social"><span>▶️</span><span>📘</span><span>📸</span><span>𝕏</span><span>🎵</span><span>💼</span></div>
     </div>
-    <div><h4>Shop</h4><a href="#shop">Drivers</a><a href="#shop">Irons</a><a href="#shop">Wedges</a><a href="#shop">Putters</a></div>
-    <div><h4>Sell</h4><a href="#tradein">Trade-In Value</a><a href="#tradein">How it works</a><a href="#fit">Club Fitting</a></div>
-    <div><h4>Help</h4><a href="#">Condition Guide</a><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a></div>
+  </div></div>
+  <div class="wrap fcols">
+    <div><h4>Customer Service</h4><a>Contact Us</a><a>Shipping Info</a><a>Return Policy</a><a>FAQ</a><a>Condition Guide</a><a>Order Status</a><a>Gift Cards</a></div>
+    <div><h4>Company Info</h4><a>Our Story</a><a>Store Locations</a><a>Fittings</a><a>Privacy Policy</a><a>Terms &amp; Conditions</a><a>Careers &amp; Opportunities</a><a>Why Shop James Swing?</a></div>
+    <div><h4>Golf Services</h4><a onclick="open('listing-agent.html','_blank')">AI Trade-In Agent</a><a onclick="open('club-fit-assistant.html','_blank')">AI Club Fitting</a><a>Play Guarantee</a><a>Club Customization</a><a>Tour Van Fitting</a><a>Affiliate Program</a><a>Club Finder</a></div>
+    <div><h4>Golf Club Brands</h4><a>PING</a><a>Titleist</a><a>Callaway</a><a>TaylorMade</a><a>Mizuno</a><a>Cobra</a><a>Cleveland</a><a>Odyssey</a><a>Scotty Cameron</a></div>
   </div>
-  <div class="copy">© 2026 James Swing · Demo storefront built as an AI portfolio project. Not affiliated with any existing retailer.</div>
+  <div class="fbottom">© 2026 James Swing · Demo storefront built as an AI portfolio project. Original design — not affiliated with any existing retailer.</div>
 </footer>
 
 <div class="toast" id="toast"></div>
 
 <script>
 const PRODUCTS=[
- {b:"TaylorMade",m:"Qi10 Driver",t:"Driver",p:289,was:599,c:"9 · Above Avg",icon:"🏌️"},
- {b:"Ping",m:"G430 Max Driver",t:"Driver",p:279,was:549,c:"8 · Average",icon:"🏌️"},
- {b:"Callaway",m:"Paradym Driver",t:"Driver",p:259,was:529,c:"8 · Average",icon:"🏌️"},
- {b:"Titleist",m:"TSR3 Driver",t:"Driver",p:299,was:599,c:"9 · Above Avg",icon:"🏌️"},
- {b:"TaylorMade",m:"P790 Irons 4-PW",t:"Iron Set",p:749,was:1399,c:"8 · Average",icon:"⛳"},
- {b:"Ping",m:"i230 Irons 4-PW",t:"Iron Set",p:799,was:1450,c:"9 · Above Avg",icon:"⛳"},
- {b:"Mizuno",m:"JPX 923 Irons",t:"Iron Set",p:579,was:1100,c:"8 · Average",icon:"⛳"},
- {b:"Titleist",m:"T100 Irons 4-PW",t:"Iron Set",p:699,was:1375,c:"8 · Average",icon:"⛳"},
- {b:"Titleist",m:"Vokey SM9 Wedge",t:"Wedge",p:99,was:179,c:"8 · Average",icon:"🪓"},
- {b:"Cleveland",m:"RTX ZipCore Wedge",t:"Wedge",p:69,was:149,c:"7 · Below Avg",icon:"🪓"},
- {b:"Scotty Cameron",m:"Newport 2 Putter",t:"Putter",p:279,was:449,c:"8 · Average",icon:"🥍"},
- {b:"Odyssey",m:"White Hot OG Putter",t:"Putter",p:119,was:249,c:"8 · Average",icon:"🥍"},
+ {b:"Cobra",m:"DS-Adapt X Drivers",t:"Driver",msrp:549.99,p:209.99,c:"9 · Above Avg",icon:"🏌️"},
+ {b:"Titleist",m:"TSR2 Fairway Woods",t:"Driver",msrp:349.99,p:199.99,c:"8 · Average",icon:"🪵"},
+ {b:"Mizuno",m:"ST-MAX 230 Hybrids",t:"Iron Set",msrp:249.99,p:129.99,c:"8 · Average",icon:"⛳"},
+ {b:"TaylorMade",m:"P790 Irons 4-PW",t:"Iron Set",msrp:1399.99,p:749.99,c:"8 · Average",icon:"⛳"},
+ {b:"Ping",m:"G430 Max Driver",t:"Driver",msrp:549.99,p:279.99,c:"8 · Average",icon:"🏌️"},
+ {b:"Titleist",m:"Vokey SM9 Wedge",t:"Wedge",msrp:179.99,p:99.99,c:"8 · Average",icon:"🪓"},
+ {b:"Scotty Cameron",m:"Newport 2 Putter",t:"Putter",msrp:449.99,p:279.99,c:"8 · Average",icon:"🥍"},
+ {b:"Callaway",m:"Paradym Driver",t:"Driver",msrp:599.99,p:259.99,c:"9 · Above Avg",icon:"🏌️"},
 ];
 let active="all";
-function draw(){
- const g=document.getElementById('grid');
+function drawFeat(){
+ const g=document.getElementById('featGrid');
  const list=PRODUCTS.filter(p=>active==="all"||p.t===active);
- g.innerHTML=list.map((p,i)=>`<div class="prod">
-   <div class="thumb"><span class="club">${p.icon}</span><span class="cond">${p.c}</span></div>
-   <div class="pinfo">
-     <div class="pbrand">${p.b}</div>
-     <div class="pname">${p.m}</div>
-     <div class="pprice">$${p.p} <s>$${p.was}</s></div>
-     <button class="add" onclick="addCart('${p.b} ${p.m}')">Add to cart</button>
-   </div></div>`).join("");
+ g.innerHTML=(list.length?list:PRODUCTS).map(p=>`<div class="fcard">
+   <div class="ph"><span>${p.icon}</span><span class="cond">${p.c}</span></div>
+   <div class="fbrand">${p.b}</div>
+   <div class="fmodel">${p.m}</div>
+   <div class="fmsrp">MSRP $${p.msrp.toFixed(2)}</div>
+   <div class="flabel">Pre-Owned From</div>
+   <div class="fprice">$${p.p.toFixed(2)}</div>
+   <button class="shopnow" onclick="toast('Added ${p.b} ${p.m}')">Shop Now</button>
+ </div>`).join("");
 }
-function filter(t){active=t;draw();
- document.getElementById('filterNote').textContent="Showing: "+t+"s  ·  click a category again or ";
- go('#deals');}
-let cart=0;
-function addCart(name){cart++;document.getElementById('ct').textContent=cart;toast("Added "+name+" to cart");}
+function filter(t){active=t;drawFeat();toast("Showing "+t+"s");scrollFeat();}
+function scrollFeat(){document.querySelector('section.feat').scrollIntoView({behavior:'smooth'});}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800);}
-function go(sel){document.querySelector(sel).scrollIntoView({behavior:'smooth'});}
-document.getElementById('cart').onclick=()=>toast(cart?cart+" item(s) in your cart":"Your cart is empty");
-draw();
+drawFeat();
 </script>
 </body>
 </html>
