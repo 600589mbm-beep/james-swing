@@ -31,6 +31,7 @@ Open either file in any web browser — just double-click:
 - `listing-agent.html` — paste a sample trade-in, click **Run the agent**, watch it extract → grade → price → write the listing.
 - `club-fit-assistant.html` — answer a few questions and get matched to clubs, the way an on-site assistant would convert a browser.
 - `pricing-engine.html` — reprice live inventory against market signals; recover margin on underpriced clubs and flag stale stock to mark down.
+- `agents-hub.html` — **AI Operations Center**: an orchestrator coordinating all the agents (grading, listing, pricing, fitting, SEO) through a live intake batch, with an animated ROI tally. The agentic, multi-step, tool-calling pattern end-to-end.
 
 ## How the prototypes map to production
 
