@@ -140,15 +140,15 @@
 </div></header>
 
 <nav class="cats"><div class="wrap">
-  <a onclick="filter('Driver')">Drivers</a>
-  <a onclick="filter('Iron Set')">Iron Sets</a>
-  <a onclick="open('listing-agent.html','_blank')">Trade + Sell</a>
-  <a onclick="open('club-fit-assistant.html','_blank')">Fitting</a>
-  <a onclick="scrollFeat()">Shafts</a>
-  <a onclick="scrollFeat()">Fairway Woods</a>
-  <a onclick="filter('Putter')">Putters</a>
-  <a onclick="filter('Wedge')">Wedges</a>
-  <a onclick="scrollFeat()">Comparison Videos</a>
+  <a href="shop.html?cat=Driver">Drivers</a>
+  <a href="shop.html?cat=Iron%20Set">Iron Sets</a>
+  <a href="trade-in.html">Trade + Sell</a>
+  <a href="fitting.html">Fitting</a>
+  <a href="shop.html">Shafts</a>
+  <a href="shop.html">Fairway Woods</a>
+  <a href="shop.html?cat=Putter">Putters</a>
+  <a href="shop.html?cat=Wedge">Wedges</a>
+  <a href="agents-hub.html">Comparison Videos</a>
 </div></nav>
 
 <section class="hero"><div class="wrap">
@@ -266,7 +266,7 @@ function drawFeat(){
    <div class="fmsrp">MSRP $${p.msrp.toFixed(2)}</div>
    <div class="flabel">Pre-Owned From</div>
    <div class="fprice">$${p.p.toFixed(2)}</div>
-   <button class="shopnow" onclick="toast('Added ${p.b} ${p.m}')">Shop Now</button>
+   <a class="shopnow" style="text-decoration:none" href="shop.html?cat=${encodeURIComponent(p.t)}">Shop Now</a>
  </div>`).join("");
 }
 function filter(t){active=t;drawFeat();toast("Showing "+t+"s");scrollFeat();}

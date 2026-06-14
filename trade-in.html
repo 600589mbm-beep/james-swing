@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade + Sell · James Swing</title>
+<style>
+  .th{background:linear-gradient(120deg,#0c1424,#0a3d8f);color:#fff;padding:54px 0;position:relative;overflow:hidden}
+  .th h1{margin:0;font-size:46px;font-weight:900;font-style:italic;max-width:680px}
+  .th p{margin:12px 0 24px;font-size:18px;color:#cfe0ff;max-width:560px}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:30px 0}
+  @media(max-width:760px){.steps{grid-template-columns:1fr}}
+  .step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;box-shadow:var(--shadow)}
+  .step .n{width:34px;height:34px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin-bottom:10px}
+  .step b{font-size:16px} .step p{font-size:13.5px;color:var(--grey);margin:6px 0 0}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:10px 0 30px}
+  @media(max-width:760px){.twocol{grid-template-columns:1fr}}
+  .agentcard{background:linear-gradient(135deg,#0a1326,#13234a);color:#fff;border-radius:14px;padding:24px;box-shadow:var(--shadow)}
+  .agentcard .ic{font-size:34px} .agentcard h3{margin:8px 0 4px;font-size:20px}
+  .agentcard p{color:#9fb6db;font-size:14px;margin:0 0 16px}
+  .secband{text-align:center;margin:34px 0 6px}
+</style>
+</head>
+<body>
+<div class="th"><div class="wrap">
+  <h1>Turn your old clubs into store credit — instantly.</h1>
+  <p>Our AI agents value your trade-in in seconds, grade it from photos, and get you the highest payout. Guaranteed.</p>
+  <button class="cta" onclick="window.open('listing-agent.html','_blank')">Value My Clubs Now →</button>
+</div></div>
+
+<div class="wrap">
+  <div class="steps">
+    <div class="step"><div class="n">1</div><b>Describe or photograph it</b><p>Tell our AI the club, or snap a few photos.</p></div>
+    <div class="step"><div class="n">2</div><b>AI grades & prices it</b><p>Agents grade condition on our 10-point scale and price it against the live market.</p></div>
+    <div class="step"><div class="n">3</div><b>Get paid or trade up</b><p>Take cash or extra store credit — your choice.</p></div>
+  </div>
+
+  <p class="sechead secband">THE AGENTS BEHIND YOUR TRADE-IN</p>
+  <div class="twocol">
+    <div class="agentcard">
+      <div class="ic">📝</div><h3>Listing Agent</h3>
+      <p>Turns a messy description into a priced, graded, ready-to-post listing in seconds — the same engine that powers your instant quote.</p>
+      <button class="cta" onclick="window.open('listing-agent.html','_blank')">Open Trade-In Agent →</button>
+    </div>
+    <div class="agentcard">
+      <div class="ic">📸</div><h3>Photo Condition Grader</h3>
+      <p>Reads your club photos and proposes a fair grade against our published 10-point scale — consistent, fast, and transparent.</p>
+      <button class="cta" onclick="window.open('agents-hub.html','_blank')">See it in the Ops Center →</button>
+    </div>
+  </div>
+
+  <div id="strip"></div>
+  <div style="height:20px"></div>
+</div>
+
+<script src="store.js"></script>
+<script>
+renderChrome('Trade + Sell');
+document.getElementById('strip').innerHTML=agentStrip("The whole team helps you sell for more",[["📝","Listing Agent","listing-agent.html"],["📸","Photo Grader","agents-hub.html"],["💰","Pricing Agent","pricing-engine.html"],["🧠","Orchestrator","agents-hub.html"]]);
+</script>
+<script src="caddie.js"></script>
+</body>
+</html>

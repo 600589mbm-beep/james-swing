@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop Used Clubs · James Swing</title>
+<style>
+  .shophero{background:linear-gradient(120deg,#0c1424,#0a3d8f);color:#fff;padding:40px 0}
+  .shophero h1{margin:0;font-size:34px;font-weight:900;font-style:italic}
+  .shophero p{margin:6px 0 0;color:#cfe0ff;font-size:15px}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+  .fchip{border:1.5px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:13px;padding:8px 16px;border-radius:30px;cursor:pointer;transition:.15s}
+  .fchip:hover{border-color:var(--blue2)} .fchip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .count{color:var(--grey);font-size:13px;margin:0 0 12px}
+  .main{padding:26px 0 10px}
+</style>
+</head>
+<body>
+<div class="shophero"><div class="wrap"><h1 id="title">Shop Used Clubs</h1><p>Every club hand-graded and AI-priced against the live market.</p></div></div>
+<div class="wrap main">
+  <div id="strip"></div>
+  <div class="filters" id="filters"></div>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script src="store.js"></script>
+<script>
+renderChrome('Drivers');
+document.getElementById('strip').innerHTML=agentStrip("This catalog is graded, priced & matched by AI agents",[["💰","Pricing Agent","pricing-engine.html"],["🎯","Fitting Agent","club-fit-assistant.html"],["📝","Listing Agent","listing-agent.html"]]);
+const CATS=["All","Driver","Iron Set","Wedge","Putter"];
+let active=qp('cat')||"All";
+if(!CATS.includes(active))active="All";
+function draw(){
+ document.getElementById('filters').innerHTML=CATS.map(c=>`<button class="fchip ${c===active?'on':''}" onclick="setCat('${c}')">${c==='All'?'All Clubs':c+'s'}</button>`).join("");
+ const list=PRODUCTS.filter(p=>active==='All'||p.t===active);
+ document.getElementById('title').textContent=active==='All'?'Shop Used Clubs':active+'s';
+ document.getElementById('count').textContent=list.length+' clubs · sorted by best value';
+ document.getElementById('grid').innerHTML=list.map(p=>`<div class="fcard">
+   <div class="ph">${svgFor(p.t)}<span class="cond">${p.cond}</span><span class="ai">🤖 AI-priced</span></div>
+   <div class="fbrand">${p.b}</div><div class="fmodel">${p.m}</div>
+   <div class="fmsrp">MSRP ${money(p.msrp)}</div><div class="flabel">Pre-Owned From</div>
+   <div class="fprice" style="color:var(--blue)">${money(p.price)}</div>
+   <a class="shopnow" href="product.html?id=${p.id}">View Details</a>
+ </div>`).join("");
+}
+function setCat(c){active=c;history.replaceState(null,'','shop.html?cat='+encodeURIComponent(c));draw();}
+draw();
+</script>
+<script src="caddie.js"></script>
+</body>
+</html>
