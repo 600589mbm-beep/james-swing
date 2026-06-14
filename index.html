@@ -44,7 +44,8 @@
   .cta{display:inline-block;background:transparent;color:#fff;border:2px solid #fff;border-radius:4px;padding:15px 40px;font-weight:800;font-size:16px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:.15s}
   .cta:hover{background:#fff;color:var(--blue)}
   .cta-red{background:var(--red);border-color:var(--red)} .cta-red:hover{background:#a50d26;color:#fff}
-  .hero .club{position:absolute;right:-40px;top:50%;transform:translateY(-50%);font-size:380px;opacity:.10;z-index:1}
+  .hero .heroclub{position:absolute;right:-20px;top:50%;transform:translateY(-50%) rotate(-8deg);width:520px;opacity:.16;z-index:1}
+  @media(max-width:760px){.hero .heroclub{display:none}}
   /* brand tagline band */
   .tagband{text-align:center;padding:36px 22px 8px}
   .tagband h2{font-size:30px;font-weight:900;font-style:italic;margin:0;letter-spacing:-.5px}
@@ -59,7 +60,17 @@
   @media(max-width:1000px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:560px){.feat-grid{grid-template-columns:1fr}}
   .fcard{border:1px solid var(--line);border-radius:8px;padding:18px;display:flex;flex-direction:column;box-shadow:0 6px 18px rgba(10,61,143,.06)}
-  .fcard .ph{height:150px;background:linear-gradient(135deg,#eef3fb,#d7e4f8);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:12px;position:relative}
+  .fcard .ph{height:150px;background:linear-gradient(135deg,#eef3fb,#d7e4f8);border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative}
+  .fcard .ph svg{width:120px;height:120px;filter:drop-shadow(0 6px 8px rgba(15,30,60,.18))}
+  /* promotions */
+  .promos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+  @media(max-width:760px){.promos{grid-template-columns:1fr}}
+  .promo-tile{border-radius:12px;padding:26px;color:#fff;min-height:160px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .promo-tile h3{margin:0;font-size:22px;font-weight:900;font-style:italic;max-width:75%}
+  .promo-tile p{margin:6px 0 0;font-size:13px;opacity:.92;max-width:78%}
+  .promo-tile .go{align-self:flex-start;background:#fff;color:var(--ink);font-weight:800;font-size:12px;letter-spacing:.5px;padding:9px 16px;border:none;border-radius:4px;cursor:pointer;text-transform:uppercase;margin-top:14px}
+  .promo-tile .bigicon{position:absolute;right:-10px;bottom:-20px;width:150px;opacity:.18}
+  .pt1{background:linear-gradient(135deg,#0a3d8f,#1565d8)} .pt2{background:linear-gradient(135deg,#c8102e,#7a0a1d)} .pt3{background:linear-gradient(135deg,#1f2d44,#3a4a6b)}
   .fcard .cond{position:absolute;top:8px;left:8px;background:var(--blue);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:14px;text-transform:uppercase}
   .fbrand{font-weight:900;font-style:italic;font-size:18px}
   .fmodel{color:var(--red);font-weight:800;font-style:italic;font-size:14px;margin-bottom:6px}
@@ -141,7 +152,7 @@
 </div></nav>
 
 <section class="hero"><div class="wrap">
-  <div class="club">🏌️</div>
+  <svg class="heroclub" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><line x1="92" y1="10" x2="48" y2="68" stroke="#fff" stroke-width="4" stroke-linecap="round"/><ellipse cx="46" cy="84" rx="40" ry="28" fill="#fff"/><ellipse cx="36" cy="75" rx="13" ry="8" fill="#cfe0ff"/></svg>
   <h1>HIGHEST TRADE VALUES GUARANTEED</h1>
   <p>Turn your old clubs into store credit today.</p>
   <button class="cta" onclick="open('listing-agent.html','_blank')">Check Values</button>
@@ -164,7 +175,25 @@
   <button class="cta cta-red" onclick="open('listing-agent.html','_blank')">Start My Trade-In</button>
 </div></section>
 
-<div style="padding:30px 0 0"><div class="wrap"><p class="sechead">SHOP TOP GOLF PROMOTIONS</p><p class="sechead sub">Top deals on the best clubs</p></div></div>
+<div style="padding:34px 0 6px"><div class="wrap"><p class="sechead">SHOP TOP GOLF PROMOTIONS</p><p class="sechead sub">Top deals on the best clubs</p>
+  <div class="promos">
+    <div class="promo-tile pt1">
+      <svg class="bigicon" viewBox="0 0 120 120"><ellipse cx="48" cy="82" rx="38" ry="27" fill="#fff"/><line x1="86" y1="14" x2="50" y2="66" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>
+      <div><h3>Drivers Up To 50% Off</h3><p>Pre-owned big-name drivers, expertly graded.</p></div>
+      <button class="go" onclick="filter('Driver')">Shop Drivers</button>
+    </div>
+    <div class="promo-tile pt2">
+      <svg class="bigicon" viewBox="0 0 120 120"><rect x="26" y="64" width="68" height="30" rx="7" fill="#fff"/><line x1="60" y1="10" x2="60" y2="64" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>
+      <div><h3>+10% Trade-In Bonus</h3><p>Extra store credit this week — valued instantly by AI.</p></div>
+      <button class="go" onclick="open('listing-agent.html','_blank')">Value My Clubs</button>
+    </div>
+    <div class="promo-tile pt3">
+      <svg class="bigicon" viewBox="0 0 120 120"><path d="M30 64 L74 86 q9 4 5 14 l-3 6 q-4 7 -12 3 L26 90 q-8 -4 -4 -14 z" fill="#fff"/><line x1="82" y1="14" x2="52" y2="70" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>
+      <div><h3>Certified Pre-Owned Irons</h3><p>Tour-level sets with a 90-day playability guarantee.</p></div>
+      <button class="go" onclick="filter('Iron Set')">Shop Irons</button>
+    </div>
+  </div>
+</div></div>
 
 <section class="insights"><div class="wrap">
   <p class="sechead" style="margin-bottom:0">EXPERT INSIGHTS</p>
@@ -202,6 +231,12 @@
 <div class="toast" id="toast"></div>
 
 <script>
+const SVG={
+ "Driver":`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><line x1="88" y1="12" x2="50" y2="66" stroke="#9aa7bd" stroke-width="5" stroke-linecap="round"/><line x1="86" y1="14" x2="96" y2="5" stroke="#1f2d44" stroke-width="7" stroke-linecap="round"/><ellipse cx="48" cy="82" rx="38" ry="27" fill="#1f2d44"/><ellipse cx="39" cy="74" rx="13" ry="8" fill="#33456b"/><circle cx="30" cy="86" r="3.5" fill="#cfd8e6"/></svg>`,
+ "Iron Set":`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><line x1="82" y1="12" x2="52" y2="70" stroke="#9aa7bd" stroke-width="5" stroke-linecap="round"/><path d="M30 64 L74 86 q9 4 5 14 l-3 6 q-4 7 -12 3 L26 90 q-8 -4 -4 -14 z" fill="#c7cfdb"/><line x1="36" y1="74" x2="62" y2="88" stroke="#9aa7bd" stroke-width="1.6"/><line x1="33" y1="80" x2="59" y2="94" stroke="#9aa7bd" stroke-width="1.6"/></svg>`,
+ "Wedge":`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><line x1="80" y1="10" x2="52" y2="68" stroke="#9aa7bd" stroke-width="5" stroke-linecap="round"/><path d="M28 60 L74 84 q10 5 6 16 l-4 8 q-4 8 -13 4 L24 92 q-9 -4 -5 -16 z" fill="#aab4c4"/><line x1="34" y1="72" x2="62" y2="88" stroke="#7f8ba0" stroke-width="1.6"/><line x1="31" y1="79" x2="59" y2="95" stroke="#7f8ba0" stroke-width="1.6"/></svg>`,
+ "Putter":`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="8" x2="60" y2="64" stroke="#9aa7bd" stroke-width="5" stroke-linecap="round"/><rect x="26" y="64" width="68" height="30" rx="7" fill="#1f2d44"/><rect x="55" y="64" width="10" height="22" fill="#c8102e"/><circle cx="38" cy="79" r="4" fill="#33456b"/><circle cx="82" cy="79" r="4" fill="#33456b"/></svg>`
+};
 const PRODUCTS=[
  {b:"Cobra",m:"DS-Adapt X Drivers",t:"Driver",msrp:549.99,p:209.99,c:"9 · Above Avg",icon:"🏌️"},
  {b:"Titleist",m:"TSR2 Fairway Woods",t:"Driver",msrp:349.99,p:199.99,c:"8 · Average",icon:"🪵"},
@@ -217,7 +252,7 @@ function drawFeat(){
  const g=document.getElementById('featGrid');
  const list=PRODUCTS.filter(p=>active==="all"||p.t===active);
  g.innerHTML=(list.length?list:PRODUCTS).map(p=>`<div class="fcard">
-   <div class="ph"><span>${p.icon}</span><span class="cond">${p.c}</span></div>
+   <div class="ph">${SVG[p.t]||SVG.Driver}<span class="cond">${p.c}</span></div>
    <div class="fbrand">${p.b}</div>
    <div class="fmodel">${p.m}</div>
    <div class="fmsrp">MSRP $${p.msrp.toFixed(2)}</div>
