@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2nd Swing · AI Club-Fit Assistant (Prototype)</title>
+<style>
+  :root{--green:#0b5d3b;--green2:#0f7a4d;--ink:#10241b;--paper:#f4f7f4;--card:#fff;--line:#dfe7e0;--muted:#5f7468;--gold:#c8972b;--shadow:0 10px 30px rgba(11,93,59,.12)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
+  header{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;padding:24px 28px}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:14px;letter-spacing:.5px;opacity:.95}
+  .ball{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#cfd8d0);box-shadow:inset -3px -3px 6px rgba(0,0,0,.15)}
+  h1{margin:12px 0 4px;font-size:24px}
+  header p{margin:0;opacity:.92;font-size:14.5px}
+  main{max-width:760px;margin:24px auto;padding:0 20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+  .prog{height:6px;background:#e7eee8;border-radius:6px;overflow:hidden;margin-bottom:18px}
+  .prog>div{height:100%;background:linear-gradient(90deg,var(--gold),var(--green2));width:0;transition:.4s}
+  .q{font-size:18px;font-weight:700;margin:0 0 16px}
+  .opts{display:grid;gap:10px}
+  .opt{text-align:left;border:1px solid var(--line);background:#fbfdfb;border-radius:10px;padding:13px 15px;font-size:15px;cursor:pointer;transition:.15s;font-family:inherit}
+  .opt:hover{border-color:var(--green2);background:#eef7ef;transform:translateY(-1px)}
+  .back{margin-top:16px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer}
+  /* results */
+  .results{display:none}
+  .results.show{display:block;animation:fade .5s}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+  .rhead{font-size:14px;color:var(--muted);margin:0 0 4px}
+  .rtitle{font-size:20px;font-weight:800;color:var(--green);margin:0 0 16px}
+  .rec{display:flex;gap:14px;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;align-items:flex-start}
+  .rank{flex:0 0 30px;height:30px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .rec h3{margin:0 0 2px;font-size:16px}
+  .rec .price{color:var(--green);font-weight:800;font-size:16px}
+  .rec .why{font-size:13.5px;color:var(--muted);margin:6px 0 0}
+  .tag{display:inline-block;font-size:11px;background:#eef7ef;color:var(--green);border:1px solid #cfe6d4;border-radius:20px;padding:2px 9px;margin:6px 6px 0 0}
+  .restart{margin-top:8px;width:100%;border:none;background:var(--ink);color:#fff;padding:12px;border-radius:10px;font-size:14px;cursor:pointer}
+  .note{max-width:760px;margin:0 auto 40px;padding:14px 20px;color:var(--muted);font-size:12.5px}
+  .note b{color:var(--ink)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand"><span class="ball"></span> 2ND SWING · AI OPERATIONS PROTOTYPE</div>
+  <h1>AI Club-Fit Assistant</h1>
+  <p>A few quick questions, then matched to the right used clubs — the way an on-site assistant turns a browser into a buyer.</p>
+</div></header>
+
+<main>
+  <div class="card">
+    <div class="prog"><div id="bar"></div></div>
+    <div id="quiz"></div>
+    <div class="results" id="results">
+      <p class="rhead">Based on your answers, here's your fit:</p>
+      <div id="recs"></div>
+      <button class="restart" id="restart">Start over</button>
+    </div>
+  </div>
+</main>
+<div class="note"><b>How this maps to production:</b> the prototype matches answers to a built-in catalog with transparent rules so it runs instantly. The live version is a conversational LLM assistant grounded in 2nd Swing's real inventory and fitting data — answering free-text questions ("I slice my driver, what helps?") and linking straight to in-stock clubs. Conversion lever; see <code>docs/ROI-analysis.md</code>.</div>
+
+<script>
+const QUESTIONS=[
+ {q:"What are you shopping for?",k:"type",a:[
+   {t:"Driver",v:"Driver"},{t:"Irons",v:"Iron Set"},{t:"Wedge",v:"Wedge"},{t:"Putter",v:"Putter"}]},
+ {q:"What's your skill level?",k:"level",a:[
+   {t:"Beginner / high handicap",v:"beginner"},{t:"Intermediate",v:"mid"},{t:"Low handicap / advanced",v:"low"}]},
+ {q:"What matters most to you?",k:"priority",a:[
+   {t:"Forgiveness & easy to hit",v:"forgiveness"},{t:"Distance",v:"distance"},{t:"Feel & control",v:"feel"},{t:"Best value",v:"value"}]},
+ {q:"Budget?",k:"budget",a:[
+   {t:"Under $150",v:150},{t:"$150–$350",v:350},{t:"$350+",v:9999}]},
+ {q:"Dexterity?",k:"dex",a:[
+   {t:"Right handed",v:"RH"},{t:"Left handed",v:"LH"}]}
+];
+// catalog with fit attributes
+const CATALOG=[
+ {b:"Ping",m:"G430 Max",t:"Driver",p:330,fit:["forgiveness","distance"],lvl:["beginner","mid"],tags:["Max forgiveness","Adjustable"]},
+ {b:"TaylorMade",m:"Stealth 2",t:"Driver",p:260,fit:["distance","forgiveness"],lvl:["mid","low"],tags:["Carbon face","Fast"]},
+ {b:"Callaway",m:"Rogue ST Max",t:"Driver",p:230,fit:["forgiveness","value"],lvl:["beginner","mid"],tags:["Great value","Forgiving"]},
+ {b:"Titleist",m:"TSR3",t:"Driver",p:330,fit:["feel","distance"],lvl:["low"],tags:["Players driver","Workable"]},
+ {b:"Ping",m:"G430",t:"Iron Set",p:620,fit:["forgiveness","distance"],lvl:["beginner","mid"],tags:["Game improvement"]},
+ {b:"Mizuno",m:"JPX 923 Hot Metal",t:"Iron Set",p:600,fit:["distance","feel"],lvl:["mid"],tags:["Soft feel","Distance"]},
+ {b:"TaylorMade",m:"P790",t:"Iron Set",p:760,fit:["feel","distance"],lvl:["mid","low"],tags:["Players distance"]},
+ {b:"Titleist",m:"T100",t:"Iron Set",p:720,fit:["feel"],lvl:["low"],tags:["Tour-level control"]},
+ {b:"Callaway",m:"Apex Pro",t:"Iron Set",p:650,fit:["feel","value"],lvl:["mid","low"],tags:["Forged feel"]},
+ {b:"Titleist",m:"Vokey SM9",t:"Wedge",p:110,fit:["feel","control"],lvl:["mid","low"],tags:["Tour spin"]},
+ {b:"Cleveland",m:"RTX ZipCore",t:"Wedge",p:80,fit:["value","feel"],lvl:["beginner","mid"],tags:["Great value spin"]},
+ {b:"Scotty Cameron",m:"Newport 2",t:"Putter",p:300,fit:["feel"],lvl:["mid","low"],tags:["Premium feel","Blade"]},
+ {b:"Odyssey",m:"White Hot OG",t:"Putter",p:130,fit:["value","feel"],lvl:["beginner","mid"],tags:["Soft insert","Value"]},
+ {b:"TaylorMade",m:"Spider Tour",t:"Putter",p:160,fit:["forgiveness","value"],lvl:["beginner","mid"],tags:["High MOI","Stable"]}
+];
+let step=0; const ans={};
+const quiz=document.getElementById('quiz');
+function renderQ(){
+ const Q=QUESTIONS[step];
+ document.getElementById('bar').style.width=(step/QUESTIONS.length*100)+"%";
+ quiz.innerHTML=`<p class="q">${Q.q}</p><div class="opts">`+
+   Q.a.map((o,i)=>`<button class="opt" data-i="${i}">${o.t}</button>`).join("")+`</div>`+
+   (step>0?`<button class="back" id="back">← back</button>`:"");
+ quiz.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ans[Q.k]=Q.a[+b.dataset.i].v;step++;step<QUESTIONS.length?renderQ():finish();});
+ const bk=document.getElementById('back'); if(bk) bk.onclick=()=>{step--;renderQ();};
+}
+function score(c){
+ let s=0;
+ if(c.t!==ans.type) return -999;
+ if(c.fit.includes(ans.priority)) s+=3;
+ if(c.lvl.includes(ans.level)) s+=2;
+ if(c.p<=ans.budget) s+=2; else s-=3;
+ if(ans.priority==="value" && c.p<=ans.budget*0.7) s+=1;
+ return s;
+}
+function finish(){
+ document.getElementById('bar').style.width="100%";
+ quiz.style.display="none";
+ const ranked=CATALOG.map(c=>({c,s:score(c)})).filter(x=>x.s>-900).sort((a,b)=>b.s-a.s).slice(0,3);
+ const recs=document.getElementById('recs');
+ if(!ranked.length){recs.innerHTML="<p>No in-stock match for those filters — our team can source one for you.</p>";}
+ else recs.innerHTML=ranked.map((x,i)=>{
+   const c=x.c; const fits=[];
+   if(c.fit.includes(ans.priority)) fits.push("matches your priority on "+ans.priority);
+   if(c.lvl.includes(ans.level)) fits.push("suited to "+ans.level+" players");
+   if(c.p<=ans.budget) fits.push("within budget");
+   return `<div class="rec"><div class="rank">${i+1}</div><div>
+     <h3>${c.b} ${c.m} ${c.t}</h3>
+     <div class="price">$${c.p}</div>
+     <div>${c.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+     <p class="why">Why: ${fits.join("; ")||"closest available match"}. ${ans.dex==="LH"?"Available left-handed.":""}</p>
+   </div></div>`;
+ }).join("");
+ document.getElementById('results').classList.add('show');
+}
+document.getElementById('restart').onclick=()=>{step=0;for(const k in ans)delete ans[k];document.getElementById('results').classList.remove('show');quiz.style.display="block";renderQ();};
+renderQ();
+</script>
+</body>
+</html>

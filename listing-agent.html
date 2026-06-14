@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2nd Swing · AI Trade-In Listing Agent (Prototype)</title>
+<style>
+  :root{
+    --green:#0b5d3b; --green2:#0f7a4d; --lime:#7ac943; --ink:#10241b;
+    --paper:#f4f7f4; --card:#ffffff; --line:#dfe7e0; --muted:#5f7468;
+    --gold:#c8972b; --shadow:0 10px 30px rgba(11,93,59,.12);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
+  header{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;padding:26px 28px}
+  header .wrap{max-width:1080px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:15px;letter-spacing:.5px;opacity:.95}
+  .ball{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#cfd8d0);box-shadow:inset -3px -3px 6px rgba(0,0,0,.15)}
+  h1{margin:14px 0 6px;font-size:26px}
+  header p{margin:0;max-width:680px;opacity:.92;font-size:15px}
+  .tagchips{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);padding:5px 11px;border-radius:20px;font-size:12.5px}
+  main{max-width:1080px;margin:24px auto;padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media(max-width:880px){main{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+  .card h2{margin:0 0 4px;font-size:16px;color:var(--green)}
+  .card .sub{margin:0 0 14px;color:var(--muted);font-size:13px}
+  label{font-size:12.5px;font-weight:600;color:var(--muted);display:block;margin:0 0 6px}
+  textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;font-family:inherit;resize:vertical;background:#fbfdfb}
+  textarea:focus{outline:none;border-color:var(--green2);box-shadow:0 0 0 3px rgba(15,122,77,.12)}
+  .examples{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+  .ex{font-size:12px;background:#eef4ef;border:1px solid var(--line);color:var(--green);padding:6px 10px;border-radius:8px;cursor:pointer;transition:.15s}
+  .ex:hover{background:var(--green);color:#fff}
+  .run{margin-top:14px;width:100%;border:none;background:linear-gradient(135deg,var(--green2),var(--green));color:#fff;font-size:15px;font-weight:700;padding:13px;border-radius:10px;cursor:pointer;transition:.15s}
+  .run:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+  .run:disabled{opacity:.6;cursor:default;transform:none}
+  /* pipeline */
+  .step{display:flex;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line);opacity:.35;transition:.4s}
+  .step:last-child{border-bottom:none}
+  .step.active,.step.done{opacity:1}
+  .dot{flex:0 0 28px;height:28px;border-radius:50%;background:#e7eee8;color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;transition:.3s}
+  .step.active .dot{background:var(--gold);color:#fff;animation:pulse 1s infinite}
+  .step.done .dot{background:var(--green2);color:#fff}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  .step .body strong{font-size:13.5px}
+  .step .body span{display:block;font-size:12.5px;color:var(--muted);min-height:16px}
+  /* listing output */
+  .listing{display:none}
+  .listing.show{display:block;animation:fade .5s}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+  .price{font-size:34px;font-weight:800;color:var(--green)}
+  .price small{font-size:14px;color:var(--muted);font-weight:600}
+  .ltitle{font-size:18px;font-weight:700;margin:2px 0 2px}
+  .cond{display:inline-block;background:#eef7ef;color:var(--green);border:1px solid #cfe6d4;padding:3px 10px;border-radius:20px;font-size:12.5px;font-weight:700;margin-bottom:10px}
+  table{width:100%;border-collapse:collapse;margin:8px 0 4px;font-size:13px}
+  td{padding:7px 6px;border-bottom:1px solid var(--line)}
+  td:first-child{color:var(--muted);width:42%}
+  .desc{font-size:13.5px;background:#fbfdfb;border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:10px;white-space:pre-wrap}
+  .meta{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .pill{flex:1;min-width:140px;background:#f4f9f5;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .pill b{display:block;font-size:18px;color:var(--green)}
+  .pill span{font-size:11.5px;color:var(--muted)}
+  .flag{background:#fff7e6;border:1px solid #f0dca6;color:#8a6512;border-radius:10px;padding:10px 12px;font-size:12.5px;margin-top:10px}
+  .copybtn{margin-top:12px;background:var(--ink);color:#fff;border:none;padding:9px 14px;border-radius:8px;font-size:13px;cursor:pointer}
+  footer{max-width:1080px;margin:10px auto 50px;padding:0 20px;color:var(--muted);font-size:12px}
+  .note{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:14px 16px;margin:0 20px 30px;max-width:1080px;margin-left:auto;margin-right:auto;color:var(--muted);font-size:12.5px}
+  .note b{color:var(--ink)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="ball"></span> 2ND SWING · AI OPERATIONS PROTOTYPE</div>
+    <h1>Trade-In → Listing Agent</h1>
+    <p>Paste a messy customer trade-in (the way it actually arrives — a text, an email, a scribbled note) and the agent extracts the specs, grades condition on 2nd Swing's 10-point scale, prices it, and writes a ready-to-post product listing.</p>
+    <div class="tagchips">
+      <span class="chip">Multi-step tool-calling workflow</span>
+      <span class="chip">Unstructured → structured data</span>
+      <span class="chip">2nd Swing condition scale</span>
+      <span class="chip">Automated pricing</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>1 · Messy trade-in input</h2>
+    <p class="sub">Try a sample, or type your own in plain English.</p>
+    <label for="inp">Raw customer submission</label>
+    <textarea id="inp" placeholder="e.g. hey I've got a taylormade stealth 2 driver, 10.5, stiff shaft, righty. used maybe 10 rounds, couple tiny scratches on the sole but looks great"></textarea>
+    <div class="examples" id="examples"></div>
+    <button class="run" id="run">⚡ Run the agent</button>
+  </section>
+
+  <section class="card">
+    <h2>2 · Agent reasoning</h2>
+    <p class="sub">Each step is a tool the agent calls in sequence.</p>
+    <div id="pipe">
+      <div class="step" data-k="extract"><div class="dot">1</div><div class="body"><strong>Extract specs</strong><span>Brand · model · type · shaft · loft · dexterity</span></div></div>
+      <div class="step" data-k="grade"><div class="dot">2</div><div class="body"><strong>Grade condition</strong><span>Map wear language → 2nd Swing 6–10 scale</span></div></div>
+      <div class="step" data-k="price"><div class="dot">3</div><div class="body"><strong>Price it</strong><span>Catalog value × condition multiplier</span></div></div>
+      <div class="step" data-k="compose"><div class="dot">4</div><div class="body"><strong>Compose listing</strong><span>Title · specs · SEO description · trade offer</span></div></div>
+    </div>
+
+    <div class="listing" id="out">
+      <hr style="border:none;border-top:1px solid var(--line);margin:16px 0">
+      <div class="cond" id="oCond"></div>
+      <div class="ltitle" id="oTitle"></div>
+      <div class="price"><span id="oPrice"></span> <small id="oMarket"></small></div>
+      <div class="meta">
+        <div class="pill"><b id="oOffer"></b><span>Suggested trade-in offer (cash)</span></div>
+        <div class="pill"><b id="oCredit"></b><span>Trade-in credit (store)</span></div>
+        <div class="pill"><b id="oConf"></b><span>Extraction confidence</span></div>
+      </div>
+      <table id="oSpecs"></table>
+      <div class="desc" id="oDesc"></div>
+      <div class="flag" id="oFlag" style="display:none"></div>
+      <button class="copybtn" id="copy">Copy listing text</button>
+    </div>
+  </section>
+</main>
+
+<div class="note">
+  <b>How this maps to the job:</b> the 4 steps above are exactly the "multi-step, tool-calling workflow" and "convert unstructured data into structured, AI-ready assets" the 2nd Swing AI Engineer role describes. This prototype runs the reasoning with built-in logic so it works instantly in any browser with no setup or API key. The production version swaps each step for a live LLM call (Claude / GPT) plus a vision model that reads the customer's photos — same pipeline, smarter brain.
+</div>
+<footer>Prototype built as a demonstration. Condition tiers based on 2nd Swing's public condition guide. Pricing is illustrative.</footer>
+
+<script>
+/* ---------- mini "catalog" : base resale value at condition 8 (Average) ---------- */
+const CATALOG = [
+  // drivers
+  {b:"TaylorMade",m:"Qi10",t:"Driver",p:330},
+  {b:"TaylorMade",m:"Stealth 2",t:"Driver",p:260},
+  {b:"TaylorMade",m:"Stealth",t:"Driver",p:220},
+  {b:"TaylorMade",m:"SIM2",t:"Driver",p:200},
+  {b:"Callaway",m:"Paradym",t:"Driver",p:300},
+  {b:"Callaway",m:"Rogue ST Max",t:"Driver",p:230},
+  {b:"Titleist",m:"TSR3",t:"Driver",p:330},
+  {b:"Titleist",m:"TSi3",t:"Driver",p:260},
+  {b:"Ping",m:"G430 Max",t:"Driver",p:330},
+  {b:"Ping",m:"G425 Max",t:"Driver",p:240},
+  {b:"Cobra",m:"Aerojet",t:"Driver",p:230},
+  // fairway / hybrid
+  {b:"TaylorMade",m:"Stealth 2",t:"Fairway Wood",p:200},
+  {b:"Ping",m:"G430",t:"Fairway Wood",p:200},
+  {b:"Callaway",m:"Apex",t:"Hybrid",p:150},
+  // iron sets
+  {b:"TaylorMade",m:"P790",t:"Iron Set",p:760},
+  {b:"Titleist",m:"T100",t:"Iron Set",p:720},
+  {b:"Callaway",m:"Apex Pro",t:"Iron Set",p:650},
+  {b:"Ping",m:"i230",t:"Iron Set",p:800},
+  {b:"Ping",m:"G430",t:"Iron Set",p:620},
+  {b:"Mizuno",m:"JPX 923 Hot Metal",t:"Iron Set",p:600},
+  // wedges
+  {b:"Titleist",m:"Vokey SM9",t:"Wedge",p:110},
+  {b:"Titleist",m:"Vokey SM10",t:"Wedge",p:140},
+  {b:"Cleveland",m:"RTX ZipCore",t:"Wedge",p:80},
+  // putters
+  {b:"Scotty Cameron",m:"Newport 2",t:"Putter",p:300},
+  {b:"Odyssey",m:"White Hot OG",t:"Putter",p:130},
+  {b:"TaylorMade",m:"Spider Tour",t:"Putter",p:160},
+  {b:"Ping",m:"Anser",t:"Putter",p:140},
+];
+
+const COND = {
+  10:{lbl:"10 · Brand New", mult:1.60, blurb:"brand new condition, never used on a course"},
+  9.5:{lbl:"9.5 · Mint", mult:1.40, blurb:"virtually no traces of wear, hit only a handful of times"},
+  9:{lbl:"9 · Above Average", mult:1.22, blurb:"played fewer than 10 rounds, top-of-the-line used condition"},
+  8:{lbl:"8 · Average", mult:1.00, blurb:"shows normal signs of use with small imperfections"},
+  7:{lbl:"7 · Below Average", mult:0.80, blurb:"well used but not abused — great value for the performance-minded"},
+  6:{lbl:"6 · Poor", mult:0.60, blurb:"considerable wear but fully useable"},
+};
+
+const EXAMPLES = [
+  "hey I've got a taylormade stealth 2 driver, 10.5 degrees, stiff shaft, right handed. used maybe 8 rounds, couple tiny scratches on the sole but honestly looks great",
+  "Selling my Scotty Cameron Newport 2 putter. used it without a headcover for two seasons so the topline is pretty dinged up and finish is wearing. still rolls perfect.",
+  "Ping i230 irons 4-PW, regular flex steel, righty. like new, hit em twice at the range then switched. basically mint",
+  "callaway paradym driver lefty, never even took the plastic off, brand new still in box",
+  "titleist vokey sm9 56 degree wedge, well used, lots of ball marks and face browning but grooves are fine"
+];
+
+/* ---------- the "agent" ---------- */
+function lower(s){return s.toLowerCase();}
+
+function extract(text){
+  const t = lower(text);
+  // find catalog match (prefer longest model string)
+  let best=null;
+  CATALOG.forEach(c=>{
+    if(t.includes(lower(c.b)) && t.includes(lower(c.m))){
+      if(!best || c.m.length>best.m.length) best=c;
+    }
+  });
+  // dexterity
+  let dex="Right Handed";
+  if(/\b(lefty|left handed|left-handed|lh)\b/.test(t)) dex="Left Handed";
+  // flex
+  let flex="—";
+  if(/x[\s-]?stiff|x-flex|\btx\b/.test(t)) flex="X-Stiff";
+  else if(/stiff|\bs flex\b/.test(t)) flex="Stiff";
+  else if(/regular|\breg\b|\br flex\b/.test(t)) flex="Regular";
+  else if(/senior|\ba flex\b|light/.test(t)) flex="Senior";
+  else if(/ladies|women/.test(t)) flex="Ladies";
+  // loft
+  let loft="—";
+  const lm = t.match(/(\d{1,2}(\.\d)?)\s*(°|deg|degree)/);
+  if(lm) loft=lm[1]+"°";
+  // iron set range
+  let setRange="";
+  const sm = t.match(/(\d)\s*[-to]+\s*(pw|gw|aw|sw|\d{1,2})/i);
+  if(best && best.t==="Iron Set" && sm) setRange = sm[0].toUpperCase().replace(/\s/g,'');
+  return {match:best, dex, flex, loft, setRange};
+}
+
+function grade(text){
+  const t = lower(text);
+  if(/brand new|never (been )?used|still in (the )?(box|plastic|wrap)|nib|bnib/.test(t)) return 10;
+  if(/\b(mint|like new|near perfect|basically new)\b/.test(t)) return 9.5;
+  if(/(barely|hardly) used|few rounds|fewer than 10|less than 10|under 10 rounds|hit (it )?(once|twice|a (few|couple))/.test(t)) return 9;
+  if(/(beat up|rough shape|heavily worn|lots of dings|finish (worn|gone)|considerable wear|cracked)/.test(t)) return 6;
+  if(/(well used|heavily used|lots of (scratches|ball marks)|browning|sky ?marks?|dinged up|finish (is )?wearing|major (wear|bag wear)|paint (chip|missing))/.test(t)) return 7;
+  if(/(some|couple|few|small|slight|minor|tiny) (scratch|mark|wear|imperfection)|normal wear|signs of use|used (a |for )?(season|year|while)/.test(t)) return 8;
+  return 8; // default
+}
+
+function money(n){return "$"+n.toLocaleString(undefined,{maximumFractionDigits:0});}
+
+function run(){
+  const text = document.getElementById('inp').value.trim();
+  if(!text){alert("Paste a trade-in description first (or click a sample).");return;}
+  const steps=[...document.querySelectorAll('.step')];
+  steps.forEach(s=>s.className='step');
+  document.getElementById('out').className='listing';
+  const btn=document.getElementById('run'); btn.disabled=true; btn.textContent="Running…";
+
+  const ex = extract(text);
+  const score = grade(text);
+  const c = COND[score];
+
+  const seq=[
+    ()=>{ // extract
+      const s=ex.match? `${ex.match.b} ${ex.match.m} ${ex.match.t} · ${ex.dex}` : "Brand/model not recognised — flagged for review";
+      setStep('extract',s);
+    },
+    ()=>setStep('grade', `${c.lbl} — ${c.blurb}`),
+    ()=>{
+      const base = ex.match? ex.match.p : 0;
+      const val = Math.round(base*c.mult/5)*5;
+      setStep('price', ex.match? `Catalog ${money(base)} × ${c.mult.toFixed(2)} = ${money(val)} resale` : "No catalog price (unknown model)");
+    },
+    ()=>{ setStep('compose',"Listing generated ✓"); render(ex,score,text); }
+  ];
+  let i=0;
+  (function tick(){
+    if(i>0) steps[i-1].classList.add('done'),steps[i-1].classList.remove('active');
+    if(i<seq.length){ steps[i].classList.add('active'); seq[i](); i++; setTimeout(tick,750); }
+    else { steps[steps.length-1].classList.add('done'); btn.disabled=false; btn.textContent="⚡ Run the agent"; }
+  })();
+}
+
+function setStep(k,msg){
+  const el=document.querySelector(`.step[data-k="${k}"] .body span`);
+  if(el) el.textContent=msg;
+}
+
+function render(ex,score,raw){
+  const c=COND[score];
+  const out=document.getElementById('out'); out.classList.add('show');
+  const known = !!ex.match;
+  const base = known? ex.match.p : 0;
+  const price = Math.round(base*c.mult/5)*5;
+  const offerCash = Math.round(price*0.55/5)*5;     // typical cash trade %
+  const offerCredit = Math.round(price*0.70/5)*5;   // store credit is higher
+
+  const name = known? `${ex.match.b} ${ex.match.m} ${ex.match.t}` : "Unrecognised Club";
+  const titleBits=[name];
+  if(ex.setRange) titleBits.push(ex.setRange);
+  if(ex.loft!=="—") titleBits.push(ex.loft);
+  if(ex.flex!=="—") titleBits.push(ex.flex+" Flex");
+  titleBits.push(ex.dex);
+
+  document.getElementById('oCond').textContent=c.lbl;
+  document.getElementById('oTitle').textContent=titleBits.join(" · ");
+  document.getElementById('oPrice').textContent= known? money(price) : "—";
+  document.getElementById('oMarket').textContent= known? "listed resale price" : "needs manual pricing";
+  document.getElementById('oOffer').textContent= known? money(offerCash):"—";
+  document.getElementById('oCredit').textContent= known? money(offerCredit):"—";
+
+  // confidence
+  let conf=40;
+  if(known) conf+=35;
+  if(ex.flex!=="—") conf+=8;
+  if(ex.loft!=="—"||ex.setRange) conf+=7;
+  if(ex.dex) conf+=10;
+  conf=Math.min(conf,98);
+  document.getElementById('oConf').textContent=conf+"%";
+
+  const specs=[
+    ["Brand", known?ex.match.b:"?"],
+    ["Model", known?ex.match.m:"?"],
+    ["Type", known?ex.match.t:"?"],
+    ["Dexterity", ex.dex],
+    ["Shaft flex", ex.flex],
+    ["Loft", ex.loft],
+  ];
+  if(ex.setRange) specs.push(["Set make-up", ex.setRange]);
+  specs.push(["Condition", c.lbl]);
+  document.getElementById('oSpecs').innerHTML=specs.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
+
+  const desc =
+`${name}${ex.loft!=="—"?` (${ex.loft})`:""} in ${c.lbl.split('· ')[1]} condition. `+
+`This ${ex.dex.toLowerCase()} club ${c.blurb}. `+
+(ex.flex!=="—"?`Fitted with a ${ex.flex.toLowerCase()} flex shaft. `:"")+
+`Graded against 2nd Swing's condition standards by our AI intake agent and ready to ship. `+
+`Backed by the 2nd Swing 90-day playability guarantee.`;
+  document.getElementById('oDesc').textContent=desc;
+
+  const flag=document.getElementById('oFlag');
+  const missing=[];
+  if(!known) missing.push("brand/model not in catalog");
+  if(ex.flex==="—") missing.push("shaft flex");
+  if(ex.loft==="—" && known && /Driver|Wood|Wedge/.test(ex.match.t)) missing.push("loft");
+  if(missing.length){ flag.style.display="block"; flag.innerHTML="⚑ <b>Agent would ask the customer for:</b> "+missing.join(", ")+"."; }
+  else flag.style.display="none";
+}
+
+/* wire up */
+document.getElementById('run').addEventListener('click',run);
+const exWrap=document.getElementById('examples');
+EXAMPLES.forEach((e,i)=>{
+  const b=document.createElement('div'); b.className='ex'; b.textContent="Sample "+(i+1);
+  b.title=e;
+  b.onclick=()=>{document.getElementById('inp').value=e;};
+  exWrap.appendChild(b);
+});
+document.getElementById('copy').addEventListener('click',()=>{
+  const t=document.getElementById('oTitle').textContent+"\n"+
+          document.getElementById('oPrice').textContent+"\n\n"+
+          document.getElementById('oDesc').textContent;
+  navigator.clipboard.writeText(t).then(()=>{const c=document.getElementById('copy');c.textContent="Copied ✓";setTimeout(()=>c.textContent="Copy listing text",1500);});
+});
+</script>
+</body>
+</html>
